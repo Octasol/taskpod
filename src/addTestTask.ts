@@ -4,14 +4,31 @@ import Redis from "ioredis";
 const redisConnection = new Redis(process.env.REDIS_URL || "");
 
 // Initialize the queue
-export const taskQueue = new Queue("taskQueue", {
+// export const taskQueue = new Queue("taskQueue", {
+//   connection: redisConnection,
+// });
+
+const highPriorityQueueName = "highPriorityQueue";
+const lowPriorityQueueName = "lowPriorityQueue";
+
+const highPriorityQueue = new Queue(highPriorityQueueName, {
   connection: redisConnection,
 });
-
+const lowPriorityQueue = new Queue(lowPriorityQueueName, {
+  connection: redisConnection,
+});
 // Function to add tasks
 export const addToQueue = async (taskData: object) => {
-  await taskQueue.add("task", taskData);
-  console.log("Task added to the queue:", taskData);
+  const num = Math.random() < 0 ? 1 : 10;
+  // await taskQueue.add("task", taskData, {
+  //   priority: num,
+  // });
+  if (num === 1) {
+    await highPriorityQueue.add("task", taskData);
+  } else {
+    await lowPriorityQueue.add("task", taskData);
+  }
+  console.log("Task added to the queue:", taskData, num);
 };
 
 const getISTTimestamp = (): string => {
