@@ -19,7 +19,7 @@ const lowPriorityQueue = new Queue(lowPriorityQueueName, {
 });
 // Function to add tasks
 export const addToQueue = async (taskData: object) => {
-  const num = Math.random() < 0 ? 1 : 10;
+  const num = Math.random() < 0.5 ? 1 : 10;
   // await taskQueue.add("task", taskData, {
   //   priority: num,
   // });
