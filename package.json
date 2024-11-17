@@ -6,11 +6,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "ts-node src/worker.ts",
-    "addTestTask": "ts-node src/scripts/addTestTask.ts",
-    "getIncompleteJobs": "ts-node src/scripts/getIncompleteJobs.ts",
-    "updateZeros": "ts-node src/scripts/updateZeros.ts",
-    "findUsersWithoutGithubProfile": "ts-node src/scripts/findUsersWithoutGithubProfile.ts",
-    "findUsersWithZeroPointsAndGithubProfile": "ts-node src/scripts/findUsersWithZeroPointsAndGithubProfile.ts"
+    "addTestTask": "ts-node scripts/addTestTask.ts",
+    "getIncompleteJobs": "ts-node scripts/getIncompleteJobs.ts",
+    "updateZeros": "ts-node scripts/updateZeros.ts",
+    "findUsersWithoutGithubProfile": "ts-node scripts/findUsersWithoutGithubProfile.ts",
+    "findUsersWithZeroPointsAndGithubProfile": "ts-node scripts/findUsersWithZeroPointsAndGithubProfile.ts",
+    "clean:failedTasks": "ts-node scripts/cleanFailedTasks.ts"
   },
   "keywords": [],
   "author": "",
