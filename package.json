@@ -7,12 +7,16 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "ts-node src/worker.ts",
     "addTestTask": "ts-node src/addTestTask.ts",
-    "getIncompleteJobs": "ts-node src/getIncompleteJobs.ts"
+    "getIncompleteJobs": "ts-node src/getIncompleteJobs.ts",
+    "updateZeros": "ts-node src/updateZeros.ts",
+    "findUsersWithoutGithubProfile": "ts-node src/findUsersWithoutGithubProfile.ts",
+    "findUsersWithZeroPointsAndGithubProfile": "ts-node src/findUsersWithZeroPointsAndGithubProfile.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@prisma/client": "^5.22.0",
     "bullmq": "^5.25.1",
     "dotenv": "^16.4.5",
     "ioredis": "^5.4.1",
