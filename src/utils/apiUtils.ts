@@ -1,5 +1,6 @@
 import axios from "axios";
 import { getCache, setCache } from "../lib/cache";
+import { logToDiscord } from "../lib/discordLogger";
 
 export async function getUserByAuthHeader(authHeader: string) {
   try {
@@ -17,10 +18,10 @@ export async function getUserByAuthHeader(authHeader: string) {
     setCache(cacheKey, response.data);
     return response.data;
   } catch (error) {
-    // await logToDiscord(
-    //   `getUserByAuthHeader: ${(error as any).message}`,
-    //   "ERROR"
-    // );
+    await logToDiscord(
+      `getUserByAuthHeader: ${(error as any).message}`,
+      "ERROR"
+    );
 
     console.error("Failed to fetch Github ID", error);
     return null;

@@ -1,5 +1,6 @@
 import db from "../config/db";
 import { GithubDevProfile } from "../config/types";
+import { logToDiscord } from "../lib/discordLogger";
 
 const getHackerrankProfile = async (id: bigint) => {
   return db.hackerrankProfile.findUnique({
@@ -58,7 +59,7 @@ export const getDbUser = async (githubId: bigint) => {
 };
 
 const updateTotalPoints = async (id: bigint) => {
-  //   await logToDiscord(`Updating total points initialized for id: ${id}`, "INFO");
+  await logToDiscord(`Updating total points initialized for id: ${id}`, "INFO");
   const hackerrankProfile = await getHackerrankProfile(id);
   const githubDevProfile = await getGithubDevProfile(id);
   const gfgProfile = await getGFGProfile(id);
@@ -107,14 +108,14 @@ const updateTotalPoints = async (id: bigint) => {
   }
 
   if (totalPoints == user?.totalPoints) {
-    // await logToDiscord(
-    //   `Total points (${totalPoints}) already up to date for id: ${id}`,
-    //   "INFO"
-    // );
+    await logToDiscord(
+      `Total points (${totalPoints}) already up to date for id: ${id}`,
+      "INFO"
+    );
     return false;
   }
 
-//   await logToDiscord(`Updating total points triggered for id: ${id}`, "INFO");
+  await logToDiscord(`Updating total points triggered for id: ${id}`, "INFO");
 
   return await db.user.update({
     where: { githubId: id },
@@ -158,14 +159,14 @@ export const setGithubDevProfile = async (
       });
     }
     await updateTotalPoints(id).then(() => {
-      //   logToDiscord(`Updated Github data for id: ${id}`, "INFO");
+      logToDiscord(`Updated Github data for id: ${id}`, "INFO");
     });
     return true;
   } catch (error) {
-    // await logToDiscord(
-    //   `dbUtils/setGithubDevProfile: ${(error as any).message}`,
-    //   "ERROR"
-    // );
+    await logToDiscord(
+      `dbUtils/setGithubDevProfile: ${(error as any).message}`,
+      "ERROR"
+    );
     console.error(error);
     return false;
   }
