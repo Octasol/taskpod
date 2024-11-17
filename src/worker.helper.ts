@@ -1,6 +1,8 @@
 import { Worker } from "bullmq";
 import { redisConnection } from "./connection";
 import { highPriorityQueue } from "./queue";
+import { logger } from "./logger";
+import { highPriorityQueueName, lowPriorityQueueName } from "./constants";
 
 // Worker to handle high-priority tasks only
 /**
@@ -15,12 +17,12 @@ export const createHighPriorityWorker = () => {
   const worker = new Worker(
     highPriorityQueueName,
     async (job) => {
-      console.log(
+      logger.info(
         `High-Priority Worker processing job ${job.id} with data:`,
         job.data
       );
       await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulate task processing
-      console.log(`High-Priority Worker completed job ${job.id}`);
+      logger.info(`High-Priority Worker completed job ${job.id}`);
     },
     {
       connection: redisConnection,
@@ -28,11 +30,12 @@ export const createHighPriorityWorker = () => {
   );
 
   worker.on("failed", (job, err) => {
-    if (job)
-      console.error(
+    if (job) {
+      logger.error(
         `High-Priority Worker - Job ${job.id} failed with error:`,
         err
       );
+    }
   });
   return worker;
 };
@@ -50,12 +53,12 @@ export const createLowPriorityWorker = () => {
   const worker = new Worker(
     lowPriorityQueueName,
     async (job) => {
-      console.log(
+      logger.info(
         `Low-Priority Worker processing job ${job.id} with data:`,
         job.data
       );
       await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulate task processing
-      console.log(`Low-Priority Worker completed job ${job.id}`);
+      logger.info(`Low-Priority Worker completed job ${job.id}`);
     },
     {
       connection: redisConnection,
@@ -64,7 +67,7 @@ export const createLowPriorityWorker = () => {
 
   worker.on("failed", (job, err) => {
     if (job)
-      console.error(
+      logger.error(
         `Low-Priority Worker - Job ${job.id} failed with error:`,
         err
       );
@@ -89,7 +92,7 @@ export const createMixedPriorityWorker = async () => {
   const switchToQueue = async (queueName: string) => {
     if (worker) {
       await worker.close();
-      console.log(`Mixed-Priority Worker stopped for ${currentQueueName}`);
+      logger.info(`Mixed-Priority Worker stopped for ${currentQueueName}`);
     }
 
     currentQueueName = queueName;
@@ -98,12 +101,12 @@ export const createMixedPriorityWorker = async () => {
       async (job) => {
         const queueType =
           job.queueName === highPriorityQueueName ? "High" : "Low";
-        console.log(
+        logger.info(
           `Mixed: ${queueType}-Priority Job Worker processing job ${job.id} with data:`,
           job.data
         );
         await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulate task processing
-        console.log(
+        logger.info(
           `Mixed: ${queueType}-Priority Job Worker completed job ${job.id}`
         );
       },
@@ -114,12 +117,12 @@ export const createMixedPriorityWorker = async () => {
 
     worker.on("failed", (job, err) => {
       if (job)
-        console.error(
+        logger.error(
           `Mixed-Priority Worker - Job ${job.id} failed with error:`,
           err
         );
     });
-    console.log(`Mixed-Priority Worker started for ${currentQueueName}`);
+    logger.info(`Mixed-Priority Worker started for ${currentQueueName}`);
   };
 
   // Initially, start the worker with low-priority tasks
@@ -131,13 +134,13 @@ export const createMixedPriorityWorker = async () => {
       highPriorityJobCount > 0 &&
       currentQueueName !== highPriorityQueueName
     ) {
-      console.log("Switching Mixed-Priority Worker to high-priority queue.");
+      logger.info("Switching Mixed-Priority Worker to high-priority queue.");
       await switchToQueue(highPriorityQueueName);
     } else if (
       highPriorityJobCount === 0 &&
       currentQueueName !== lowPriorityQueueName
     ) {
-      console.log(
+      logger.info(
         "Switching Mixed-Priority Worker back to low-priority queue."
       );
       await switchToQueue(lowPriorityQueueName);

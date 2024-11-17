@@ -1,3 +1,5 @@
+import "./logger";
+import "./scheduler";
 import {
   createHighPriorityWorker,
   createLowPriorityWorker,

@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "ts-node src/worker.ts",
-    "addTestTask": "ts-node src/addTestTask.ts",
+    "addTestTask": "ts-node src/lib/addTestTask.ts",
     "getIncompleteJobs": "ts-node src/getIncompleteJobs.ts",
     "updateZeros": "ts-node src/updateZeros.ts",
     "findUsersWithoutGithubProfile": "ts-node src/findUsersWithoutGithubProfile.ts",
@@ -17,10 +17,16 @@
   "license": "ISC",
   "dependencies": {
     "@prisma/client": "^5.22.0",
+    "@types/node": "^22.9.0",
     "bullmq": "^5.25.1",
     "dotenv": "^16.4.5",
     "ioredis": "^5.4.1",
+    "node-cron": "^3.0.3",
     "ts-node": "^10.9.2",
-    "typescript": "^5.6.3"
+    "typescript": "^5.6.3",
+    "winston": "^3.17.0"
+  },
+  "devDependencies": {
+    "@types/node-cron": "^3.0.11"
   }
 }
