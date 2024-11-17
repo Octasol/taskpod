@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import { errorFile, infoFile } from "../config/constants";
 
 const cleanupLogs = (logFile: string): void => {
   const filePath = path.resolve(logFile);
@@ -16,10 +17,10 @@ const cleanupLogs = (logFile: string): void => {
 // Export cleanup functions for info and error logs
 export const cleanupInfoLogs = (): void => {
   console.log("Running cleanup for info logs...");
-  cleanupLogs("worker.info.log");
+  cleanupLogs(infoFile);
 };
 
 export const cleanupErrorLogs = (): void => {
   console.log("Running cleanup for error logs...");
-  cleanupLogs("worker.error.log");
+  cleanupLogs(errorFile);
 };

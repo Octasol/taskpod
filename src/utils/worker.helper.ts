@@ -1,8 +1,12 @@
 import { Worker } from "bullmq";
-import { redisConnection } from "./connection";
-import { highPriorityQueue } from "./queue";
-import { logger } from "./logger";
-import { highPriorityQueueName, lowPriorityQueueName } from "./constants";
+import { handleTasks } from "./handleTasks";
+import {
+  highPriorityQueueName,
+  lowPriorityQueueName,
+} from "../config/constants";
+import { logger } from "../lib/logger";
+import { redisConnection } from "../config/redis-connection";
+import { highPriorityQueue } from "../lib/queue";
 
 // Worker to handle high-priority tasks only
 /**
@@ -21,7 +25,7 @@ export const createHighPriorityWorker = () => {
         `High-Priority Worker processing job ${job.id} with data:`,
         job.data
       );
-      await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulate task processing
+      await handleTasks(job.data);
       logger.info(`High-Priority Worker completed job ${job.id}`);
     },
     {
@@ -57,7 +61,7 @@ export const createLowPriorityWorker = () => {
         `Low-Priority Worker processing job ${job.id} with data:`,
         job.data
       );
-      await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulate task processing
+      await handleTasks(job.data);
       logger.info(`Low-Priority Worker completed job ${job.id}`);
     },
     {
@@ -105,7 +109,7 @@ export const createMixedPriorityWorker = async () => {
           `Mixed: ${queueType}-Priority Job Worker processing job ${job.id} with data:`,
           job.data
         );
-        await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulate task processing
+        await handleTasks(job.data);
         logger.info(
           `Mixed: ${queueType}-Priority Job Worker completed job ${job.id}`
         );

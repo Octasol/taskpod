@@ -1,10 +1,10 @@
-import "./logger";
-import "./scheduler";
+import "./lib/logger";
+import "./lib/scheduler";
 import {
   createHighPriorityWorker,
   createLowPriorityWorker,
   createMixedPriorityWorker,
-} from "./worker.helper";
+} from "./utils/worker.helper";
 
 // Initialize workers
 createHighPriorityWorker();

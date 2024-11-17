@@ -1,12 +1,13 @@
 import winston from "winston";
+import { errorFile, infoFile } from "../config/constants";
 
 // Create separate transports for info and error logs
 const infoTransport = new winston.transports.File({
-  filename: "worker.info.log",
+  filename: infoFile,
   level: "info",
 });
 const errorTransport = new winston.transports.File({
-  filename: "worker.error.log",
+  filename: errorFile,
   level: "error",
 });
 
@@ -19,9 +20,5 @@ export const logger = winston.createLogger({
       return `${timestamp} [${level.toUpperCase()}]: ${message}`;
     })
   ),
-  transports: [
-    new winston.transports.Console(),
-    infoTransport,
-    errorTransport,
-  ],
+  transports: [infoTransport, errorTransport],
 });

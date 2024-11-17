@@ -1,9 +1,9 @@
 import cron from "node-cron";
-import { cleanupInfoLogs, cleanupErrorLogs } from "./cleanupLogs";
+import { cleanupErrorLogs, cleanupInfoLogs } from "../utils/cleanupLogs";
 
 // Schedule cleanup for info logs every 12 hours
-cron.schedule("*/1 * * * *", () => {
-    cleanupInfoLogs();
+cron.schedule("0 */12 * * *", () => {
+  cleanupInfoLogs();
 });
 
 // Schedule cleanup for error logs every 3 days
