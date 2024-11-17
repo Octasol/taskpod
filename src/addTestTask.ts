@@ -26,13 +26,26 @@ export const addToQueue = async (taskData: object) => {
   if (num === 1) {
     await highPriorityQueue.add("task", taskData);
   } else {
+    const jobs = await lowPriorityQueue.getJobs([
+      "waiting",
+      "active",
+      "delayed",
+      "paused",
+    ]);
+    const isDuplicate = jobs.some(
+      (job) => JSON.stringify(job.data) === JSON.stringify(taskData)
+    );
+    if (isDuplicate) {
+      console.log("Duplicate task found, not enqueuing.");
+      return;
+    }
     await lowPriorityQueue.add("task", taskData);
   }
   console.log("Task added to the queue:", taskData, num);
 };
 
+const now = new Date();
 const getISTTimestamp = (): string => {
-  const now = new Date();
 
   return now.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
 };
