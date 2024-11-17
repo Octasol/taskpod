@@ -62,11 +62,14 @@ export const logToDiscord = async (
       await axios.post(webhookUrl, payload);
       console.log(`Logged to Discord [${level}]: ${message}`);
     } else {
-      console.warn(
-        `Webhook URL for ${level} is not defined. Skipping Discord log.`
-      );
+      console.log(`[${level}]: ${message}`);
     }
   } catch (error) {
-    console.error("Error logging to Discord:", error);
+    console.log(`[${level}]: ${message}`);
+    if (axios.isAxiosError(error)) {
+      console.error("Error logging to Discord:", error.response?.status);
+    } else {
+      console.error("Error logging to Discord:", error);
+    }
   }
 };
