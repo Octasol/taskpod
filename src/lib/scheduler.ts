@@ -12,5 +12,5 @@ cron.schedule("0 0 */2 * *", () => {
 });
 
 console.log(
-  "Cron jobs scheduled: info logs every 12 hours, error logs every 3 days."
+  "Cron jobs scheduled: info logs every 6 hours, error logs every 2 days."
 );
