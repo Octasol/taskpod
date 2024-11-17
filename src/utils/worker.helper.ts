@@ -1,8 +1,9 @@
-import { Worker } from "bullmq";
+import { Queue, Worker } from "bullmq";
 import { handleTasks } from "./handleTasks";
 import {
   highPriorityQueueName,
   lowPriorityQueueName,
+  QueuePriority,
 } from "../config/constants";
 import { logger } from "../lib/logger";
 import { redisConnection } from "../config/redis-connection";
@@ -25,7 +26,7 @@ export const createHighPriorityWorker = () => {
         `High-Priority Worker processing job ${job.id} with data:`,
         job.data
       );
-      await handleTasks(job.data);
+      await handleTasks(job.data, QueuePriority.High);
       logger.info(`High-Priority Worker completed job ${job.id}`);
     },
     {
@@ -61,7 +62,7 @@ export const createLowPriorityWorker = () => {
         `Low-Priority Worker processing job ${job.id} with data:`,
         job.data
       );
-      await handleTasks(job.data);
+      await handleTasks(job.data, QueuePriority.Low);
       logger.info(`Low-Priority Worker completed job ${job.id}`);
     },
     {
@@ -104,12 +105,12 @@ export const createMixedPriorityWorker = async () => {
       currentQueueName,
       async (job) => {
         const queueType =
-          job.queueName === highPriorityQueueName ? "High" : "Low";
+          job.queueName === highPriorityQueueName ? "high" : "low";
         logger.info(
           `Mixed: ${queueType}-Priority Job Worker processing job ${job.id} with data:`,
           job.data
         );
-        await handleTasks(job.data);
+        await handleTasks(job.data, queueType as QueuePriority);
         logger.info(
           `Mixed: ${queueType}-Priority Job Worker completed job ${job.id}`
         );

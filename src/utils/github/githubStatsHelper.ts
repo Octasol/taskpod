@@ -81,7 +81,7 @@ async function getGithubGraphql(login: string, authHeader: string) {
     return res.data.data;
   } catch (error) {
     await logToDiscord(
-      `githubStatsHelper/getGithubGraphql: ${(error as any).message}`,
+      `githubStatsHelper/getGithubGraphql: ${(error as any).toString()}`,
       "ERROR"
     );
 
@@ -89,7 +89,7 @@ async function getGithubGraphql(login: string, authHeader: string) {
       "Error fetching GitHub GraphQL data:",
       (error as any).message
     );
-    throw new Error("Failed to fetch GitHub GraphQL data");
+    throw new Error(`Failed to fetch GitHub GraphQL data: ${error}`);
   }
 }
 
