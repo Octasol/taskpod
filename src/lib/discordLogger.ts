@@ -2,6 +2,9 @@
  * Utility functions for logging to Discord. (Only for production server, accessibly only by the server admins)
  */
 import axios from "axios";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const defaultWebhookUrl = process.env.DISCORD_WEBHOOK_URL;
 const webhookUrls = {
